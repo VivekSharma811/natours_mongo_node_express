@@ -20,6 +20,15 @@ exports.getAllTours = async (req, res) => {
             query = query.sort('-createdAt');
         }
 
+        // Field Limiting
+
+        if(fields) {
+            query = query.select(fields.split(',').join(' '));
+        } else {
+            query = query.select('-__v');
+        }
+
+        // Executing Query
         const tours = await query;
 
         res.status(200).json({
