@@ -16,9 +16,10 @@ exports.getAllTours = async (req, res) => {
         if(sort) {
             const sortBy = sort.split(',').join(' ');
             query = query.sort(sortBy)
-        } else {
-            query = query.sort('-createdAt');
-        }
+        } 
+        // else {
+        //     query = query.sort('-createdAt');
+        // }
 
         // Field Limiting
 
@@ -26,6 +27,18 @@ exports.getAllTours = async (req, res) => {
             query = query.select(fields.split(',').join(' '));
         } else {
             query = query.select('-__v');
+        }
+
+        //Pagination
+        const pageNo = page*1 || 1;
+        const limitNo = limit*1 || 20;
+        const skip = (pageNo - 1) * limitNo;
+
+        query = query.skip(skip).limit(limitNo);
+
+        if(page) {
+            const numTours = await Tour.countDocuments();
+            if(skip >= numTours) throw new Error('This page does not exist');
         }
 
         // Executing Query
