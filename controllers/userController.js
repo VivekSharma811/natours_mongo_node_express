@@ -1,5 +1,14 @@
+const AppError = require('../utils/appError');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
+
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+        if(allowedFields.includes(el)) newObj[el] = obj[el];
+    });
+    return newObj;
+};
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
 
@@ -10,6 +19,24 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
         results: users.length,
         data: {
             users
+        }
+    });
+});
+
+exports.updateMe = catchAsync(async (req, res, next) => {
+    // Password change not allowed
+    if(req.body.password || req.body.passwordConfirm) {
+        return next(new AppError('Cant change passwords here', 400));
+    }
+
+    // Update User Document
+    const filteredBody = filterObj(req.body, 'name', 'email');
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {new: true, runValidators: true});
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user: updatedUser
         }
     });
 });
