@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const appError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -13,10 +14,15 @@ const app = express();
 
 // Middlewares
 
+// Set Security HTTP headers
+app.use(helmet());
+
+// Logging for dev env
 if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Limit requests
 const limiter = rateLimit({
     max: 100,
     windowMs: 60 * 60 * 1000,
@@ -25,7 +31,10 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
+// Body parser
 app.use(express.json());
+
+//Serving static files
 app.use(express.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
