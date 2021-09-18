@@ -59,10 +59,11 @@ exports.login = catchAsync( async (req, res, next) => {
     }
 
     //Send token back
-    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-    res.cookie('jwt', token, cookieOptions);
 
     const token = signToken(user._id);
+
+    if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    res.cookie('jwt', token, cookieOptions);
 
     res.status(200).json({
         status: 'success',
@@ -189,10 +190,11 @@ exports.updatePassword = catchAsync( async(req, res, next) => {
     await user.save();
 
     //Log user in
+    const token = signToken(user._id);
+    
     if(process.env.NODE_ENV === 'production') cookieOptions.secure = true;
     res.cookie('jwt', token, cookieOptions);
 
-    const token = signToken(user._id);
     res.status(200).json({
         status: 'success',
         token

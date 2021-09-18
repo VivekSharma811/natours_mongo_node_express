@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const reviewSchema = new Mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
     review: {
         type: String,
         required: [true, 'Review can not be empty']
@@ -24,6 +24,21 @@ const reviewSchema = new Mongoose.Schema({
         ref: 'User',
         required: [true, 'Review must have an Author.']
     }
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+reviewSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'tour',
+        select: 'name'
+    }).populate({
+        path: 'user',
+        select: 'name photo'
+    });
+
+    next();
 });
 
 const Review = mongoose.model('Review', reviewSchema);
