@@ -157,3 +157,25 @@ exports.resetPassword = catchAsync( async (req, res, next) => {
         token
     });
 });
+
+exports.updatePassword = catchAsync( async(req, res, next) => {
+    // Get user from collection
+    const user = await User.findById(req.user.id).select('+password');
+
+    // Check if current pwd is correct
+    if(!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+        return next(new AppError('Current password is wrong', 401));
+    }
+
+    // Update pwd
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    await user.save();
+
+    //Log user in
+    const token = signToken(user._id);
+    res.status(200).json({
+        status: 'success',
+        token
+    });
+});
