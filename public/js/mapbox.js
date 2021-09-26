@@ -1,7 +1,5 @@
-const locations = JSON.parse(document.getElementById('map').dataset.locations);
-console.log(locations)
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiaHlwaGVubyIsImEiOiJja3Uwem4zcG4zc2s2MnVtcDRwaDNyY2ptIn0.WHA6pLOGvAw-222TwhSPxQ';
+export const displayMap = (location) => {
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaHlwaGVubyIsImEiOiJja3Uwem4zcG4zc2s2MnVtcDRwaDNyY2ptIn0.WHA6pLOGvAw-222TwhSPxQ';
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/hypheno/cku0zuid23ezl18lhmujgvj23'
@@ -33,3 +31,4 @@ locations.forEach(loc => {
 });
 
 map.fitBounds(bounds);
+}
