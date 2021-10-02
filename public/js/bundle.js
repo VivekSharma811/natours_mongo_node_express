@@ -8848,7 +8848,7 @@ var login = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'POST',
-              url: 'http://127.0.0.1:8000/api/v1/users/login',
+              url: '/api/v1/users/login',
               data: {
                 email: email,
                 password: password
@@ -8899,7 +8899,7 @@ var logout = /*#__PURE__*/function () {
             _context2.next = 3;
             return (0, _axios.default)({
               method: 'GET',
-              url: 'http://127.0.0.1:8000/api/v1/users/logout'
+              url: '/api/v1/users/logout'
             });
 
           case 3:
@@ -8960,7 +8960,7 @@ var updatedata = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'PATCH',
-              url: 'http://127.0.0.1:8000/api/v1/users/updateMe',
+              url: '/api/v1/users/updateMe',
               data: {
                 name: name,
                 email: email
