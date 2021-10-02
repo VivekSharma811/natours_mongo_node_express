@@ -47,6 +47,8 @@ app.use('/api', limiter);
 // Body parser
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true, limit: '10kb'}));
+
 // Cookie parser
 app.use(cookieParser());
 
